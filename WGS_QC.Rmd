@@ -9,22 +9,43 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## WGS quality control on samples from Misha
+1. changing directory 
+```{bash}
+#print working directory 
+pwd
+#change directory
+cd ~/Library/CloudStorage/OneDrive-Chalmers/PhD/Experimental_Data/WGS-analysis/dummydata_Misha/analysis/
+#exploring content of directory
+ls
+```
+2. make directories and activating environments
+```{bash}
+#activating conda environment qc 
+#activate qc 
+#make a working directory to put trimmed data 
+#mkdir analysis 
+```
+3. counting reads
+```{python}
+import os #to run shell code in python
+covS35 = os.system('gunzip -c G10180_B04_S35_R1_001.fastq.gz | wc -l')
+covS38 = os.system('gunzip -c G13200_G04_S38_R1_001.fastq.gz | wc -l')
+#decompress file and count lines in each 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+print("Hello",covS35)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+3. calculating coverage for both files assuming genome size=12.000.000 bp (haploid) and length read= 150 (paired already) 
+C = LN / G (L:length read; G:genome size)
+```{bash}
+L=150 
+G=12000000
+echo `expr $L * $G`
+CS35=$((L/G))
+#CS38=$((L/G*covS38))
+echo "The coverage of sample S35 is $CS35"
+#echo "The coverage of sample S38 is $CS38"
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
